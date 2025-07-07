@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zero Electricity Bill - Odisha Solar Calculator</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f0fff0;
+            padding: 20px;
+        }
+        h2 {
+            color: #2e8b57;
+        }
+        input, button {
+            padding: 10px;
+            margin: 8px 0;
+            width: 300px;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            background: #dff0d8;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>💡 Odisha Solar Savings Calculator</h2>
+
+<label>Enter Your Monthly Electricity Bill Amount (₹):</label><br>
+<input type="number" id="monthlyBill" placeholder="e.g. 1500"><br>
+
+<button onclick="calculateSolar()">Calculate Solar Requirement</button>
+
+<div class="result" id="resultDiv"></div>
+
+<script>
+function calculateSolar() {
+    const monthlyBill = parseFloat(document.getElementById('monthlyBill').value);
+    if (isNaN(monthlyBill) || monthlyBill <= 0) {
+        alert("Please enter a valid amount for your bill.");
+        return;
+    }
+
+    const costPerUnit = 4.9; // ₹ per kWh in Odisha
+    const dailyGenPerKW = 4.5; // Odisha avg solar gen per kW/day
+    const monthlyGenPerKW = dailyGenPerKW * 30; // ≈135 units/month
+
+    const estimatedUnits = monthlyBill / costPerUnit;
+    const requiredKW = (estimatedUnits / monthlyGenPerKW).toFixed(2);
+
+    const minCostPerKW = 65000;
+    const maxCostPerKW = 75000;
+
+    document.getElementById('resultDiv').innerHTML = `
+        💰 Monthly Bill: ₹${monthlyBill.toFixed(2)} <br>
+        ⚡ Estimated Monthly Usage: ${estimatedUnits.toFixed(0)} units <br>
+        ☀️ You need a <strong>${requiredKW} kW</strong> solar system to bring your bill to zero.<br>
+        🛠️ Approximate installation cost: ₹${(requiredKW * minCostPerKW).toFixed(0)} - ₹${(requiredKW * maxCostPerKW).toFixed(0)}<br>
+        🌞 You’ll generate ~${(monthlyGenPerKW * requiredKW).toFixed(0)} units/month.
+    `;
+}
+</script>
+
+</body>
+</html>
