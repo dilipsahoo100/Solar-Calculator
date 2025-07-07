@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hybrid Solar Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; }
+    label, input, select, button { display: block; margin: 10px 0; width: 100%; }
+    #equipmentTable { width: 100%; border-collapse: collapse; }
+    #equipmentTable th, #equipmentTable td { border: 1px solid #ccc; padding: 8px; }
+    #equipmentTable th { background-color: #f9f9f9; }
+    .result { margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-left: 4px solid #4caf50; white-space: pre-wrap; }
+    .remove-btn { background-color: #e74c3c; color: #fff; border: none; padding: 5px 10px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Hybrid Solar Calculator</h1>
+
+  <h2>Equipment List</h2>
+  <table id="equipmentTable">
+    <thead>
+      <tr>
+        <th>Equipment Name</th>
+        <th>Wattage (W)</th>
+        <th>Quantity</th>
+        <th>Backup Hours</th>
+        <th>Total Wh</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="equipmentContainer"></tbody>
+  </table>
+  <button type="button" id="addRowBtn">➕ Add Equipment</button>
+
+  <label for="sunlightHours">Average Sunlight Hours per Day:</label>
+  <input type="number" id="sunlightHours" placeholder="e.g., 5" />
+
+  <label for="panelWattage">Solar Panel Wattage (W):</label>
+  <input type="number" id="panelWattage" placeholder="e.g., 550" />
+
+  <label for="systemType">System Type:</label>
+  <select id="systemType">
+    <option value="hybrid">Hybrid</option>
+    <option value="offgrid">Offgrid</option>
+    <option value="ongrid">Ongrid</option>
+  </select>
+
+  <button type="button" id="calculateBtn">🧮 Calculate</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    const equipmentList = {
+      "Fan": 75,
+      "LED Bulb": 9,
+      "Tube Light": 40,
+      "TV": 120,
+      "Refrigerator": 180,
+      "Ceiling Fan": 70,
+      "Mixer Grinder": 500,
+      "Washing Machine": 600,
+      "Microwave": 1200,
+      "Iron": 1000,
+      "Laptop": 60,
+      "Desktop Computer": 150,
+      "Water Pump": 750,
+      "Air Conditioner (1 Ton)": 1200,
+      "Air Conditioner (1.5 Ton)": 1800
+    };
+
+    function createEquipmentRow() {
+      const row = document.createElement('tr');
+
+      const equipSelect = document.createElement('select');
+      const defaultOpt = document.createElement('option'); defaultOpt.text = 'Select'; defaultOpt.value = '';
+      equipSelect.appendChild(defaultOpt);
+      for (const item in equipmentList) {
+        const opt = document.createElement('option'); opt.value = item; opt.text = item; equipSelect.appendChild(opt);
+      }
+
+      const wattInput = document.createElement('input'); wattInput.type = 'number'; wattInput.className = 'equip-watt';
+      const qtyInput = document.createElement('input'); qtyInput.type = 'number'; qtyInput.className = 'equip-qty'; qtyInput.value = 1;
+      const hoursInput = document.createElement('input'); hoursInput.type = 'number'; hoursInput.className = 'equip-backup-hours'; hoursInput.value = 1;
+      const totalCell = document.createElement('td'); totalCell.className = 'total-wh'; totalCell.textContent = '0';
+
+      function updateRow() {
+        const w = parseFloat(wattInput.value) || 0;
+        const q = parseFloat(qtyInput.value) || 0;
+        const h = parseFloat(hoursInput.value) || 0;
+        totalCell.textContent = (w * q * h).toFixed(2);
+      }
+      [wattInput, qtyInput, hoursInput].forEach(i=>i.addEventListener('input', updateRow));
+      equipSelect.addEventListener('change', ()=>{ if(equipmentList[equipSelect.value]) wattInput.value = equipmentList[equipSelect.value]; updateRow(); });
+
+      const removeBtn = document.createElement('button'); removeBtn.textContent='❌'; removeBtn.className='remove-btn'; removeBtn.onclick=()=>row.remove();
+
+      const cells = [equipSelect, wattInput, qtyInput, hoursInput];
+      cells.forEach(el=>{ const td=document.createElement('td'); td.appendChild(el); row.appendChild(td); });
+      row.appendChild(totalCell);
+      const actTd=document.createElement('td'); actTd.appendChild(removeBtn); row.appendChild(actTd);
+
+      document.getElementById('equipmentContainer').appendChild(row);
+      updateRow();
+    }
+
+    function calculateSystem() {
+      const sunlight = parseFloat(document.getElementById('sunlightHours').value) || 0;
+      const panelW = parseFloat(document.getElementById('panelWattage').value) || 0;
+      if(!sunlight || !panelW){ alert('Enter sunlight hours and panel wattage'); return; }
+
+      let totalWh=0, peakW=0, details='';
+      document.querySelectorAll('#equipmentContainer tr').forEach(r=>{
+        const sel=r.cells[0].querySelector('select'); const w=parseFloat(r.cells[1].querySelector('input').value)||0;
+        const q=parseFloat(r.cells[2].querySelector('input').value)||0; const h=parseFloat(r.cells[3].querySelector('input').value)||0;
+        if(sel.value && w>0 && q>0 && h>=0){ const wh=w*q*h; totalWh+=wh; peakW+=w*q; details+=`${sel.value}: ${wh.toFixed(2)} Wh\n`; }
+      });
+      if(!totalWh){ alert('Add valid equipment'); return; }
+
+      let solarKW=totalWh/1000/sunlight;
+      if(solarKW<3 && document.getElementById('systemType').value!=='ongrid') solarKW=3;
+      solarKW=solarKW.toFixed(2);
+      const panels=Math.ceil(solarKW*1000/panelW);
+
+      // Battery calc
+      const sysV=48, batV=12, batAh=150, DoD=0.8, eff=0.9, loss=1.15;
+      const adj=totalWh/eff*loss;
+      const reqAh=adj/(sysV*DoD);
+      const series=sysV/batV;
+      const parallel=Math.ceil(reqAh/batAh);
+      const totalBat=series*parallel;
+      const instCap=batV*batAh*totalBat;
+
+      const invKVA=(peakW/0.8/1000).toFixed(2);
+
+      document.getElementById('result').textContent=
+        `Details:\n${details}\n`+
+        `Solar: ${solarKW} kW, Panels: ${panels}\n`+
+        `Backup: ${totalWh.toFixed(2)} Wh\n`+
+        `Battery Req: ${reqAh.toFixed(2)} Ah @ ${sysV}V\n`+
+        `Installed: ${instCap.toFixed(2)} Wh (${sysV}V × ${batAh}Ah × ${totalBat})\n`+
+        `Batteries: ${totalBat} (Series: ${series}, Parallel: ${parallel})\n`+
+        `Inverter: ${invKVA} kVA`;
+    }
+
+    document.getElementById('addRowBtn').addEventListener('click', createEquipmentRow);
+    document.getElementById('calculateBtn').addEventListener('click', calculateSystem);
+    window.onload = createEquipmentRow;
+  </script>
+</body>
+</html>
