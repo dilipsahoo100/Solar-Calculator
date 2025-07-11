@@ -8,16 +8,17 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #f9f9f9;
+      background: #fffdf5;
     }
 
     header {
-      background-color: #fbc02d;
+      background: linear-gradient(45deg, #ffa000, #fdd835);
       padding: 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     header img.logo {
@@ -26,69 +27,81 @@
 
     header h1 {
       margin: 0;
-      font-size: 1.5rem;
-      color: #222;
-    }
-
-    .banner {
-      width: 100%;
-      max-height: 280px;
-      object-fit: cover;
+      font-size: 1.6rem;
+      color: #212121;
+      font-weight: bold;
     }
 
     .search-bar {
-      margin: 20px;
+      margin: 25px;
       text-align: center;
     }
 
     .search-bar input {
       width: 90%;
-      max-width: 400px;
-      padding: 10px;
+      max-width: 420px;
+      padding: 12px;
       font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      border-radius: 25px;
+      border: 2px solid #ffa000;
+      outline: none;
+      transition: 0.3s;
+      box-shadow: 0 0 8px rgba(255, 160, 0, 0.3);
+    }
+
+    .search-bar input:focus {
+      border-color: #ff5722;
+      box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
     }
 
     .container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
-      padding: 20px;
+      padding: 30px 20px;
     }
 
     .card {
-      background-color: #fff;
+      background: linear-gradient(to bottom right, #fff8e1, #fffde7);
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
       text-align: center;
     }
 
     .card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
+      box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3);
     }
 
     .card h3 {
-      margin-bottom: 10px;
-      font-size: 1.1rem;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      color: #e65100;
     }
 
     .card a {
       display: block;
-      margin: 5px 0;
-      color: #0077cc;
+      margin: 6px 0;
+      color: #0288d1;
       font-weight: bold;
       text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .card a:hover {
+      color: #01579b;
+      border-color: #81d4fa;
     }
 
     footer {
       text-align: center;
       font-size: 0.9rem;
-      padding: 10px;
-      background-color: #eee;
-      color: #333;
+      padding: 12px;
+      background: linear-gradient(to right, #fbc02d, #ffecb3);
+      color: #424242;
     }
 
     @media (max-width: 600px) {
@@ -99,25 +112,21 @@
 
       header h1 {
         margin-top: 10px;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
   <header>
     <img class="logo" src="https://www.bhaktisolarenergy.in/logo.png" alt="Bhakti Solar Logo" onerror="this.style.display='none'">
-    <h1>Bhakti Solar Energy - Dashboard</h1>
+    <h1>🌞 Bhakti Solar Energy - Dashboard</h1>
   </header>
-
-  <!-- Banner Image -->
-  <img class="banner" src="https://images.unsplash.com/photo-1584270354949-1b4be6126c31?auto=format&fit=crop&w=1350&q=80" alt="Solar Panel Banner">
 
   <!-- Search -->
   <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search Dashboard..." onkeyup="filterCards()">
+    <input type="text" id="searchInput" placeholder="🔍 Search Dashboard..." onkeyup="filterCards()">
   </div>
 
   <!-- Dashboard Cards -->
@@ -130,18 +139,18 @@
 
     <div class="card">
       <h3>📚 Consumer Documentation</h3>
-      <a href="https://pmsuryaghar.gov.in/#/" target="_blank">PM Suryaghar Portal(Consumer/Vendor)</a>
-      <a href="https://solardcrportal.nise.res.in/" target="_blank"> DCR Portal</a>
+      <a href="https://pmsuryaghar.gov.in/#/" target="_blank">PM Suryaghar Portal</a>
+      <a href="https://solardcrportal.nise.res.in/" target="_blank">DCR Portal</a>
     </div>
 
     <div class="card">
       <h3>📁 Reference Documentation</h3>
-      <a href="https://drive.google.com/drive/folders/1lhIRWsZxsi41v0ql2R3ib0KGaoGluA27" target="_blank">Google Drive - Docs for refernce</a>
+      <a href="https://drive.google.com/drive/folders/1lhIRWsZxsi41v0ql2R3ib0KGaoGluA27" target="_blank">Google Drive - Docs</a>
     </div>
 
     <div class="card">
       <h3>🗂 Customer Files</h3>
-      <a href="https://drive.google.com/drive/folders/1f4qFds_-c4DFbO7HKFZc2msi6SE6Yg8B" target="_blank">Google Drive - Customers Data</a>
+      <a href="https://drive.google.com/drive/folders/1f4qFds_-c4DFbO7HKFZc2msi6SE6Yg8B" target="_blank">Google Drive - Data</a>
     </div>
 
     <div class="card">
@@ -162,8 +171,8 @@
 
     <div class="card">
       <h3>🔢 Solar Calculators</h3>
-      <a href="https://dilipsahoo100.github.io/Solar-Calculator/hybrid_solar_calculator_1.html" target="_blank">Hybrid Solar Calculator</a>
-      <a href="https://dilipsahoo100.github.io/Solar-Calculator/odisha_ongrid_solar_savings_calculator.html" target="_blank">Odisha On-Grid Calculator</a>
+      <a href="https://dilipsahoo100.github.io/Solar-Calculator/hybrid_solar_calculator_1.html" target="_blank">Hybrid Calculator</a>
+      <a href="https://dilipsahoo100.github.io/Solar-Calculator/odisha_ongrid_solar_savings_calculator.html" target="_blank" style="margin-top:10px;">Ongrid Calculator</a>
     </div>
 
     <div class="card">
@@ -175,12 +184,10 @@
 
   </div>
 
-  <!-- Footer -->
   <footer>
     © 2025 Bhakti Solar Energy. All rights reserved.
   </footer>
 
-  <!-- JS: Filter -->
   <script>
     function filterCards() {
       const input = document.getElementById("searchInput").value.toLowerCase();
