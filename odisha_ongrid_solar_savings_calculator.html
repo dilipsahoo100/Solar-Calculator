@@ -24,6 +24,30 @@
             padding: 10px;
             border-radius: 5px;
         }
+        table {
+            margin-top: 10px;
+            border-collapse: collapse;
+            width: 100%;
+            background: #fff;
+        }
+        th, td {
+            border: 1px solid #2e8b57;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background: #e6ffe6;
+        }
+        .whatsapp {
+            background: #25d366;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 14px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -36,12 +60,15 @@
 <button onclick="calculateSolar()">Calculate Solar Requirement</button>
 
 <div class="result" id="resultDiv"></div>
+<button id="waButton" class="whatsapp" style="display:none;" onclick="shareWhatsapp()">Share on WhatsApp</button>
 
 <script>
 function calculateSolar() {
     const monthlyBill = parseFloat(document.getElementById('monthlyBill').value);
     if (isNaN(monthlyBill) || monthlyBill <= 0) {
         alert("Please enter a valid amount for your bill.");
+        document.getElementById('resultDiv').innerHTML = '';
+        document.getElementById('waButton').style.display = 'none';
         return;
     }
 
@@ -50,18 +77,41 @@ function calculateSolar() {
     const monthlyGenPerKW = dailyGenPerKW * 30; // ≈135 units/month
 
     const estimatedUnits = monthlyBill / costPerUnit;
-    const requiredKW = (estimatedUnits / monthlyGenPerKW).toFixed(2);
-
+    const requiredKW = (estimatedUnits / monthlyGenPerKW);
     const minCostPerKW = 65000;
     const maxCostPerKW = 75000;
 
+    const minTotal = requiredKW * minCostPerKW;
+    const maxTotal = requiredKW * maxCostPerKW;
+    const monthlyGen = monthlyGenPerKW * requiredKW;
+
+    // Table format for results
     document.getElementById('resultDiv').innerHTML = `
-        💰 Monthly Bill: ₹${monthlyBill.toFixed(2)} <br>
-        ⚡ Estimated Monthly Usage: ${estimatedUnits.toFixed(0)} units <br>
-        ☀️ You need a <strong>${requiredKW} kW</strong> solar system to bring your bill to zero.<br>
-        🛠️ Approximate installation cost: ₹${(requiredKW * minCostPerKW).toFixed(0)} - ₹${(requiredKW * maxCostPerKW).toFixed(0)}<br>
-        🌞 You’ll generate ~${(monthlyGenPerKW * requiredKW).toFixed(0)} units/month.
+        <table>
+            <tr><th>Parameter</th><th>Value</th></tr>
+            <tr><td>Monthly Bill (₹)</td><td>₹${monthlyBill.toFixed(2)}</td></tr>
+            <tr><td>Estimated Monthly Usage (units)</td><td>${estimatedUnits.toFixed(0)}</td></tr>
+            <tr><td>Required Solar System Size (kW)</td><td>${requiredKW.toFixed(2)} kW</td></tr>
+            <tr><td>Approx. Installation Cost (₹)</td><td>₹${minTotal.toFixed(0)} - ₹${maxTotal.toFixed(0)}</td></tr>
+            <tr><td>Estimated Solar Generation (units/month)</td><td>${monthlyGen.toFixed(0)}</td></tr>
+        </table>
     `;
+
+    // Store the message for WhatsApp sharing
+    window.waMessage = 
+        `Odisha Solar Savings Calculator Results:%0A` +
+        `Monthly Bill: ₹${monthlyBill.toFixed(2)}%0A` +
+        `Estimated Usage: ${estimatedUnits.toFixed(0)} units%0A` +
+        `Required Solar System: ${requiredKW.toFixed(2)} kW%0A` +
+        `Installation Cost: ₹${minTotal.toFixed(0)} - ₹${maxTotal.toFixed(0)}%0A` +
+        `Estimated Generation: ${monthlyGen.toFixed(0)} units/month`;
+
+    document.getElementById('waButton').style.display = 'inline-block';
+}
+
+function shareWhatsapp() {
+    const url = "https://wa.me/?text=" + window.waMessage;
+    window.open(url, "_blank");
 }
 </script>
 
