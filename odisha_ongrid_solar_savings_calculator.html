@@ -1,61 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Zero Electricity Bill - Odisha Solar Calculator</title>
+    <title>Odisha Solar Savings Calculator (2025) – Corrected Central Subsidy</title>
     <style>
-        body {
-            font-family: Arial;
-            background: #f0fff0;
-            padding: 20px;
-        }
-        h2 {
-            color: #2e8b57;
-        }
-        input, button {
-            padding: 10px;
-            margin: 8px 0;
-            width: 300px;
-            font-size: 16px;
-        }
-        .result {
-            margin-top: 20px;
-            font-weight: bold;
-            background: #dff0d8;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        table {
-            margin-top: 10px;
-            border-collapse: collapse;
-            width: 100%;
-            background: #fff;
-        }
-        th, td {
-            border: 1px solid #2e8b57;
-            padding: 8px 12px;
-            text-align: left;
-        }
-        th {
-            background: #e6ffe6;
-        }
-        .whatsapp {
-            background: #25d366;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 14px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        body { font-family: Arial; background: #f0fff0; padding: 20px; }
+        h2 { color: #2e8b57; }
+        input, select, button { padding: 10px; margin: 8px 0; width: 300px; font-size: 16px; }
+        .result { margin-top: 20px; font-weight: bold; background: #dff0d8; padding: 10px; border-radius: 5px; }
+        table { margin-top: 10px; border-collapse: collapse; width: 100%; background: #fff; }
+        th, td { border: 1px solid #2e8b57; padding: 8px 12px; text-align: left; }
+        th { background: #e6ffe6; }
+        .whatsapp { background: #25d366; color: white; border: none; border-radius: 4px; padding: 10px 14px; font-size: 16px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<h2>💡 Odisha Solar Savings Calculator</h2>
+<h2>💡 Odisha Solar Savings Calculator (2025)</h2>
 
 <label>Enter Your Monthly Electricity Bill Amount (₹):</label><br>
 <input type="number" id="monthlyBill" placeholder="e.g. 1500"><br>
+
+<label>Select Plant Type:</label><br>
+<select id="plantType" onchange="updateCommercialFields()">
+    <option value="domestic">Domestic</option>
+    <option value="commercial">Commercial</option>
+</select><br>
+
+<div id="commercialFields" style="display:none;">
+    <label>Enter Commercial Solar Cost per kW (₹):</label><br>
+    <input type="number" id="commCostPerKW" placeholder="e.g. 60000"><br>
+</div>
 
 <button onclick="calculateSolar()">Calculate Solar Requirement</button>
 
@@ -63,8 +37,16 @@
 <button id="waButton" class="whatsapp" style="display:none;" onclick="shareWhatsapp()">Share on WhatsApp</button>
 
 <script>
+function updateCommercialFields() {
+    var plantType = document.getElementById('plantType').value;
+    document.getElementById('commercialFields').style.display = (plantType === 'commercial') ? 'block' : 'none';
+}
+
 function calculateSolar() {
     const monthlyBill = parseFloat(document.getElementById('monthlyBill').value);
+    const plantType = document.getElementById('plantType').value;
+    let costPerKW, subsidyText;
+
     if (isNaN(monthlyBill) || monthlyBill <= 0) {
         alert("Please enter a valid amount for your bill.");
         document.getElementById('resultDiv').innerHTML = '';
@@ -72,39 +54,77 @@ function calculateSolar() {
         return;
     }
 
-    const costPerUnit = 6; // ₹ per kWh in Odisha
-    const dailyGenPerKW = 3.5; // Odisha avg solar gen per kW/day
-    const monthlyGenPerKW = dailyGenPerKW * 30; // ≈135 units/month
+    // Constants
+    const costPerUnit = 6; // ₹ per kWh
+    const dailyGenPerKW = 4.0; // kWh per kW per day
+    const monthlyGenPerKW = dailyGenPerKW * 30; // units/month
 
+    // Commercial cost per kW (user input or default)
+    if (plantType === 'commercial') {
+        costPerKW = parseFloat(document.getElementById('commCostPerKW').value) || 60000;
+        subsidyText = "Not applicable";
+    } else {
+        costPerKW = 70000; // Typical domestic cost per kW
+    }
+
+    // Calculations
     const estimatedUnits = monthlyBill / costPerUnit;
-    const requiredKW = (estimatedUnits / monthlyGenPerKW);
-    const minCostPerKW = 65000;
-    const maxCostPerKW = 75000;
+    const requiredKW = estimatedUnits / monthlyGenPerKW;
+    // System sizing: minimum 2 kW, then round up to next whole kW
+    const systemKW = Math.max(2, Math.ceil(requiredKW));
 
-    const minTotal = requiredKW * minCostPerKW;
-    const maxTotal = requiredKW * maxCostPerKW;
-    const monthlyGen = monthlyGenPerKW * requiredKW;
+    const grossCost = systemKW * costPerKW;
+    let stateSubsidy = 0, centralSubsidy = 0;
+
+    // Domestic subsidy calculation
+    if (plantType === 'domestic') {
+        const kW1 = Math.min(systemKW, 2);
+        const kW2 = Math.min(Math.max(systemKW - 2, 0), 1); // 2-3 kW slab
+        // State subsidy
+        stateSubsidy = (kW1 * 25000) + (kW2 * 10000);
+        // Central subsidy calculation
+        if (systemKW === 2) {
+            centralSubsidy = 60000; // 2 kW = ₹60,000
+        } else if (systemKW < 3) {
+            centralSubsidy = systemKW * 30000; // ₹30,000 per kW for below 3 kW
+        } else {
+            centralSubsidy = 78000; // Flat ₹78,000 for 3 kW and above
+        }
+        subsidyText = `State: ₹${stateSubsidy.toLocaleString()}<br>Central: ₹${centralSubsidy.toLocaleString()}<br><b>Total: ₹${(stateSubsidy + centralSubsidy).toLocaleString()}</b>`;
+    }
+
+    const totalSubsidy = (plantType === 'domestic') ? (stateSubsidy + centralSubsidy) : 0;
+    const netCost = Math.max(0, grossCost - totalSubsidy);
+    const yearlySavings = monthlyBill * 12;
+    const payback = (netCost > 0 && yearlySavings > 0) ? (netCost / yearlySavings).toFixed(1) : "N/A";
 
     // Table format for results
     document.getElementById('resultDiv').innerHTML = `
         <table>
             <tr><th>Parameter</th><th>Value</th></tr>
+            <tr><td>Plant Type</td><td>${plantType.charAt(0).toUpperCase() + plantType.slice(1)}</td></tr>
             <tr><td>Monthly Bill (₹)</td><td>₹${monthlyBill.toFixed(2)}</td></tr>
             <tr><td>Estimated Monthly Usage (units)</td><td>${estimatedUnits.toFixed(0)}</td></tr>
-            <tr><td>Required Solar System Size (kW)</td><td>${requiredKW.toFixed(2)} kW</td></tr>
-            <tr><td>Approx. Installation Cost (₹)</td><td>₹${minTotal.toFixed(0)} - ₹${maxTotal.toFixed(0)}</td></tr>
-            <tr><td>Estimated Solar Generation (units/month)</td><td>${monthlyGen.toFixed(0)}</td></tr>
+            <tr><td>Required Solar System Size (kW)</td><td>${systemKW} kW</td></tr>
+            <tr><td>Gross Installation Cost (₹)</td><td>₹${grossCost.toLocaleString()}</td></tr>
+            <tr><td>Subsidy</td><td>${subsidyText}</td></tr>
+            <tr><td>Net Cost After Subsidy (₹)</td><td>₹${netCost.toLocaleString()}</td></tr>
+            <tr><td>Estimated Yearly Savings (₹)</td><td>₹${yearlySavings.toLocaleString()}</td></tr>
+            <tr><td>Estimated Payback Period (years)</td><td>${payback}</td></tr>
         </table>
     `;
 
-    // Store the message for WhatsApp sharing
-    window.waMessage = 
-        `Odisha Solar Savings Calculator Results:%0A` +
+    // WhatsApp sharing message
+    let waMsg = `Odisha Solar Savings (2025):%0A` +
+        `Plant Type: ${plantType.charAt(0).toUpperCase() + plantType.slice(1)}%0A` +
         `Monthly Bill: ₹${monthlyBill.toFixed(2)}%0A` +
-        `Estimated Usage: ${estimatedUnits.toFixed(0)} units%0A` +
-        `Required Solar System: ${requiredKW.toFixed(2)} kW%0A` +
-        `Installation Cost: ₹${minTotal.toFixed(0)} - ₹${maxTotal.toFixed(0)}%0A` +
-        `Estimated Generation: ${monthlyGen.toFixed(0)} units/month`;
+        `System Size: ${systemKW} kW%0A` +
+        `Gross Cost: ₹${grossCost.toLocaleString()}%0A` +
+        `Subsidy: ${plantType === 'domestic' ? 'State: ₹'+stateSubsidy.toLocaleString()+', Central: ₹'+centralSubsidy.toLocaleString() : 'N/A'}%0A` +
+        `Net Cost: ₹${netCost.toLocaleString()}%0A` +
+        `Yearly Savings: ₹${yearlySavings.toLocaleString()}%0A` +
+        `Payback: ${payback} years`;
+    window.waMessage = waMsg;
 
     document.getElementById('waButton').style.display = 'inline-block';
 }
