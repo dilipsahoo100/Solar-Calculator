@@ -1,0 +1,274 @@
+<!-- Full HTML: Bhakti Solar Installation App with All Steps -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhakti Solar Energy - Web Application</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
+    .container { max-width: 960px; margin: 30px auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1, h2, h3, h4 { text-align: center; color: #d35400; }
+    section { margin-bottom: 40px; border-bottom: 1px solid #ddd; padding-bottom: 30px; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select, textarea, button {
+      width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc;
+      border-radius: 4px; box-sizing: border-box;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #f8f8f8; }
+    .btn-add { background-color: #27ae60; color: white; border: none; padding: 10px 20px; margin-top: 10px; cursor: pointer; }
+    .btn-add:hover { background-color: #219150; }
+    textarea { resize: vertical; }
+    ul.doc-list li { padding: 6px 0; list-style-type: square; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌞 Bhakti Solar Energy</h1>
+    <h2>Complete Solar Installation Process</h2>
+
+    <!-- Step 1: Lead Collection -->
+    <section>
+      <h3>1. Lead Collection</h3>
+      <label>Customer Name</label><input type="text">
+      <label>Mobile Number</label><input type="text">
+      <label>Location</label><input type="text">
+      <label>Plant Type</label>
+      <select><option>On-Grid</option><option>Off-Grid</option><option>Hybrid</option><option>Street Light</option><option>Pump</option></select>
+      <label>Plant Size (kW)</label><input type="number">
+      <label>Plant Category</label>
+      <select><option>Domestic</option><option>Commercial</option></select>
+      <label>DISCOM</label><input type="text">
+      <label>Call History</label><textarea></textarea>
+    </section>
+
+        <!-- Step 2 & 13 merged -->
+    <section>
+      <h3>2. Convert Lead to Customer & Quotation</h3>
+      <label>Plant Size (kW)</label><input type="number" id="plantSize" />
+      <label>Panel Wattage</label><input type="number" id="panelWattage" />
+
+      <h4>Quotation Items</h4>
+      <table id="itemsTable">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price (₹)</th>
+            <th>GST (₹)</th>
+            <th>Total (₹)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="itemRows">
+          <tr>
+            <td>
+              <select name="item[]" class="itemSelect" onchange="recalculateRow(this)">
+                <option value="">-- Select Item --</option>
+                <option value="Solar Panel">Solar Panel</option>
+                <option value="Inverter">Inverter</option>
+                <option value="Mounting Structure">Mounting Structure</option>
+                <option value="Wiring Kit">Wiring Kit</option>
+                <option value="Installation Service">Installation Service</option>
+              </select>
+            </td>
+            <td><input type="number" name="quantity[]" class="qty" min="0" value="0" oninput="recalculateRow(this)" /></td>
+            <td><input type="number" name="price[]" class="price" min="0" value="0" oninput="recalculateRow(this)" /></td>
+            <td><input type="number" name="gst[]" class="gst" min="0" value="0" oninput="recalculateRow(this)" /></td>
+            <td><input type="number" name="total[]" class="total" readonly /></td>
+            <td><button type="button" class="btn-delete" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="btn-add" onclick="addRow()">+ Add Item</button>
+
+      <div class="total-container">
+        Grand Total (₹): <span id="grandTotal">0</span>
+      </div>
+    </section>
+
+    <!-- Step 3: Document Collection -->
+    <section>
+      <h3>3. Document Collection</h3>
+      <label>Aadhaar Card</label><input type="file">
+      <label>Bank Passbook</label><input type="file">
+      <label>Digital Signature (optional)</label><input type="file">
+    </section>
+
+    <!-- Step 4 -->
+    <section>
+      <h3>4. Customer Status Update</h3>
+      <label>Update Customer Status</label>
+      <select>
+        <option value="consumer_login_completed">Consumer Login completed and ready for Loan/Payment Advance</option>
+        <option value="loan_advance_pending">Loan/Payment Advance Pending</option>
+        <option value="loan_approved">Loan Approved</option>
+      </select>
+    </section>
+
+    <!-- Step 5 -->
+    <section>
+      <h3>5. Site Visit</h3>
+      <label>GPS Location</label><input type="text" placeholder="Auto-captured GPS location" readonly />
+      <label>Date and Time</label><input type="datetime-local" />
+      <label>Photo of Installation Place</label><input type="file" accept="image/*" />
+      <label>Site Survey Technician Name</label><input type="text" />
+      <label>Customer Photograph</label><input type="file" accept="image/*" />
+      <button type="button" onclick="alert('Notification sent to customer about site visit completion')">Send Site Visit Completion Notification</button>
+    </section>
+
+    <!-- Step 6 -->
+    <section>
+      <h3>6. Advance Payment Collection</h3>
+      <label>Payment Type</label>
+      <select>
+        <option value="cash">Cash</option>
+        <option value="loan">Loan</option>
+      </select>
+      <button type="button" onclick="alert('Quotation shared with customer')">Share Quotation</button>
+    </section>
+
+    <!-- Step 7 -->
+    <section>
+      <h3>7. Consumer Login & Digital Approval</h3>
+      <button type="button" onclick="alert('Digital approval generated via Jana Samarth Portal')">Generate Digital Approval</button>
+      <label>Send All Documents to Customer/Bank for Loan Approval</label>
+      <div>
+        <label class="checkbox-label"><input type="checkbox" name="documents" /> Digital Approval</label>
+        <label class="checkbox-label"><input type="checkbox" name="documents" /> Feasibility Report</label>
+        <label class="checkbox-label"><input type="checkbox" name="documents" /> Quotation</label>
+        <label class="checkbox-label"><input type="checkbox" name="documents" /> Aadhaar Card</label>
+        <label class="checkbox-label"><input type="checkbox" name="documents" /> Bank Passbook</label>
+        <label class="checkbox-label"><input type="checkbox" name="documents" /> Company GST</label>
+      </div>
+      <label>Status</label>
+      <select>
+        <option value="waiting_loan_disbursement">Waiting for Loan Disbursement</option>
+      </select>
+    </section>
+
+    <!-- Step 8 -->
+    <section>
+      <h3>8. Loan/Payment Acknowledgment</h3>
+      <label>Upload Bank Statement or Proof of Payment</label>
+      <input type="file" />
+      <label>Amount Received</label>
+      <input type="number" min="0" />
+      <button type="button" onclick="alert('Customer Project unlocked and notification sent')">Unlock Project & Notify Customer</button>
+    </section>
+
+    <!-- Step 9: Project Documentation by Discom -->
+    <section>
+      <h3>9. Project Documentation (Discom)</h3>
+      <label>TPCODL Docs</label>
+      <ul class="doc-list">
+        <li><button onclick="generateDoc('Application Submission - TPCODL')">Generate Application Submission</button></li>
+        <li><button onclick="generateDoc('Vendor–Consumer Agreement - TPCODL')">Generate Vendor–Consumer Agreement</button></li>
+        <li><button onclick="generateDoc('DCR Certificate - TPCODL')">Generate DCR Certificate</button></li>
+        <li><button onclick="generateDoc('Discom Agreement - TPCODL')">Generate Discom Agreement</button></li>
+        <li><button onclick="generateDoc('Joint Inspection Report - TPCODL')">Generate Joint Inspection Report</button></li>
+        <li><button onclick="generateDoc('Project Completion Form - TPCODL')">Generate Project Completion Form</button></li>
+      </ul>
+      <label>TPNODL Docs</label>
+      <ul class="doc-list">
+        <li><button onclick="generateDoc('Vendor–Consumer Agreement - TPNODL')">Generate Vendor–Consumer Agreement</button></li>
+        <li><button onclick="generateDoc('Connection Agreement Form - TPNODL')">Generate Connection Agreement Form</button></li>
+        <li><button onclick="generateDoc('Completion Report Form 4 - TPNODL')">Generate Completion Report Form 4</button></li>
+        <li><button onclick="generateDoc('Inspection Report Form 6 - TPNODL')">Generate Inspection Report Form 6</button></li>
+        <li><button onclick="generateDoc('DCR Certificate - TPNODL')">Generate DCR Certificate</button></li>
+        <li><button onclick="generateDoc('BIS Certificate for Solar Panel - TPNODL')">Generate BIS Certificate for Solar Panel</button></li>
+        <li><button onclick="generateDoc('BIS Certificate for Inverter - TPNODL')">Generate BIS Certificate for Inverter</button></li>
+      </ul>
+    </section>
+ <!-- Step 10: Installation Checklist & Logistics -->
+<section>
+  <h3>10. Installation Checklist & Logistics</h3>
+  <label><input type="checkbox" /> Site Visit</label>
+  <label><input type="checkbox" /> Structure Mounting Check</label>
+  <label><input type="checkbox" /> Panel Loading Readiness</label>
+  <label><input type="checkbox" /> Wiring Plan Verification</label>
+  <label>Truck Number</label><input type="text">
+  <label>Driver Name</label><input type="text">
+  <label>Contact Details</label><input type="text">
+  <label>Total No of Panels</label><input type="number">
+  <label>Solar Panel Company Name</label><input type="text">
+  <label>Panel Serial Numbers</label>
+  <div id="panelSerialContainer">
+    <input type="text" name="serial[]" placeholder="Enter Serial Number" />
+  </div>
+  <button type="button" class="btn-add" onclick="addSerialField()">+ Add Serial Number</button>
+  <label>Inverter Company Name</label><input type="text">
+  <label>Model No</label><input type="text">
+  <label>Inverter Serial No</label><input type="text">
+  <label>Photo of Truck Front and Back</label><input type="file" accept="image/*" multiple>
+</section>
+
+<!-- Step 11: Customer Feedback -->
+<section>
+  <h3>11. Customer Feedback</h3>
+  <label>Feedback</label><textarea placeholder="Please share your experience..."></textarea>
+  <label>Rating</label>
+  <select>
+    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+    <option value="4">⭐⭐⭐⭐ Very Good</option>
+    <option value="3">⭐⭐⭐ Good</option>
+    <option value="2">⭐⭐ Fair</option>
+    <option value="1">⭐ Poor</option>
+  </select>
+</section>
+
+<!-- Step 12: Final Confirmation -->
+<section>
+  <h3>12. Final Confirmation & Handover</h3>
+  <label>Project Completion Date</label><input type="date">
+  <label>Customer Signature (Upload)</label><input type="file">
+  <label>Final Handover Report</label><input type="file">
+  <label>Remarks</label><textarea></textarea>
+</section>
+
+<script>
+  function generateDoc(docName) {
+    alert("Generating: " + docName);
+    // Future: You can replace this alert with actual document generation or file download logic.
+  }
+</script>
+
+   
+  </div>
+
+  <script>
+    function addRow() {
+      const tableBody = document.getElementById('itemRows');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>
+          <select name="item[]">
+            <option value="">-- Select Item --</option>
+            <option>Solar Panel</option>
+            <option>Inverter</option>
+            <option>Mounting Structure</option>
+            <option>Wiring Kit</option>
+            <option>Installation Service</option>
+          </select>
+        </td>
+        <td><input type="number" name="quantity[]"></td>
+        <td><input type="number" name="price[]"></td>
+        <td><input type="number" name="gst[]"></td>
+      `;
+      tableBody.appendChild(newRow);
+    }
+function addSerialField() {
+  const container = document.getElementById('panelSerialContainer');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.name = 'serial[]';
+  input.placeholder = 'Enter Serial Number';
+  input.style.marginTop = '5px';
+  container.appendChild(input);
+}
+
+  </script>
+</body>
+</html>
