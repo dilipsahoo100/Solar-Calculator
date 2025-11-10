@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Pragati EcoSolar – Installation Completion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:1000px;margin:24px auto;padding:0 16px}
+  h1{margin:16px 0}
+  fieldset{border:1px solid #ddd;border-radius:10px;padding:16px;margin-bottom:18px}
+  legend{font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  label{font-weight:600}
+  input,select,textarea{padding:10px;border:1px solid #ccc;border-radius:8px;width:100%}
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{border:1px solid #eee;padding:8px;text-align:left}
+  button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer}
+  .primary{background:#0d6efd;color:#fff}
+  .muted{background:#f3f4f6}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .row{display:flex;gap:8px}
+</style>
+</head>
+<body>
+<h1>Pragati EcoSolar – Installation Completion</h1>
+
+<form action="https://docs.google.com/forms/d/e/1FAIpQLSf1_90OxrC9zYJcnG8jqtr-2INXV_kc_nSpr4pmt0fdIYzPvQ/viewform" method="POST" enctype="multipart/form-data">
+
+  <fieldset>
+    <legend>Customer Details</legend>
+    <div class="grid">
+      <div><label>Customer Name</label><input name="customer_name" required></div>
+      <div><label>Contact Number</label><input name="contact" required></div>
+      <div><label>District / Block</label><input name="district" required></div>
+      <div><label>System Capacity (kW)</label><input name="capacity" required></div>
+      <div class="grid" style="grid-column:1/-1;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label>Date of Installation</label><input type="date" name="install_date" required></div>
+        <div><label>Installation Team Lead</label><input name="team_lead" required></div>
+      </div>
+      <div style="grid-column:1/-1"><label>Address</label><input name="address" required></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>System Details</legend>
+    <div class="grid">
+      <div><label>Panel Brand & Model</label><input name="panel" required></div>
+      <div><label>Inverter Brand & Model</label><input name="inverter" required></div>
+      <div>
+        <label>Structure Type</label>
+        <select name="structure" required><option value="">Select…</option><option>Roof Mount</option><option>Ground Mount</option></select>
+      </div>
+      <div><label>Tilt Angle (°)</label><input name="tilt" required></div>
+      <div>
+        <label>Orientation</label>
+        <select name="orientation" required><option value="">Select…</option><option>North</option><option>South</option></select>
+      </div>
+      <div>
+        <label>Net Meter Installed</label>
+        <select name="net_meter" required><option value="">Select…</option><option>Yes</option><option>No</option></select>
+      </div>
+      <div style="grid-column:1/-1"><label>DISCOM Name</label><input name="discom" required></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Serial Numbers & Cable Brands</legend>
+    <div class="list">
+      <div>
+        <label>Solar Panel Serial Numbers</label>
+        <div id="panel-serials"></div>
+        <button type="button" class="muted" onclick="addSerial('panel-serials','panel_serials[]')">+ Add Panel Serial</button>
+      </div>
+      <div>
+        <label>Inverter Serial Number(s)</label>
+        <div id="inverter-serials"></div>
+        <button type="button" class="muted" onclick="addSerial('inverter-serials','inverter_serials[]')">+ Add Inverter Serial</button>
+      </div>
+      <div class="grid">
+        <div><label>DC Cable Brand Name</label><input name="dc_brand" required></div>
+        <div><label>AC Cable Brand Name</label><input name="ac_brand" required></div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Installation Verification</legend>
+    <div class="grid">
+      <div><label>Installation Completed</label><select name="done" required><option value="">Select…</option><option>Yes</option><option>No</option></select></div>
+      <div><label>Test Run Successful</label><select name="test_run" required><option value="">Select…</option><option>Yes</option><option>No</option></select></div>
+      <div><label>Customer Signature Taken</label><select name="signature_taken" required><option value="">Select…</option><option>Yes</option><option>No</option></select></div>
+      <div><label>Panel Serials Verified</label><select name="serials_verified" required><option value="">Select…</option><option>Yes</option><option>No</option></select></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Plant Photographs</legend>
+    <p>Upload multiple photos (panels, inverter, earthing, ACDB/DCDB, net meter, overview).</p>
+    <input type="file" name="photos" accept="image/*" multiple required>
+  </fieldset>
+
+  <fieldset>
+    <legend>Items Used (BoM)</legend>
+    <table>
+      <thead><tr><th>Item</th><th>Unit</th><th>Quantity</th></tr></thead>
+      <tbody>
+        <tr><td>Sunoara 3KW ONGRID INVERTER</td><td>Nos</td><td><input name="qty_inverter" type="number" min="0" value="1" required></td></tr>
+        <tr><td>Adani 550</td><td>Nos</td><td><input name="qty_adani550" type="number" min="0" value="6" required></td></tr>
+        <tr><td>SOLAR ROOFTOP MOUNTING STRUCTURE WITH END CLAMP & MID CLAMP</td><td>Set</td><td><input name="qty_structure" type="number" min="0" value="1" required></td></tr>
+        <tr><td>DCDB (INFI)</td><td>Nos</td><td><input name="qty_dcdb" type="number" min="0" value="1" required></td></tr>
+        <tr><td>ACDB (INFI)</td><td>Nos</td><td><input name="qty_acdb" type="number" min="0" value="1" required></td></tr>
+        <tr><td>1 CORE SOLAR DC CABLE 4 SQ MM (KEI)</td><td>Meter</td><td><input name="qty_dc4kei" type="number" min="0" value="80" required></td></tr>
+        <tr><td>1 CORE AC 4SQMM GREEN CABLE (EARTHING)</td><td>Meter</td><td><input name="qty_ac4green" type="number" min="0" value="80" required></td></tr>
+        <tr><td>1 CORE AC 4SQMM BLACK CABLE (INV - ACDB)</td><td>Meter</td><td><input name="qty_ac4black" type="number" min="0" value="10" required></td></tr>
+        <tr><td>1 CORE AC 4SQMM RED CABLE (INV-ACDB)</td><td>Meter</td><td><input name="qty_ac4red" type="number" min="0" value="10" required></td></tr>
+        <tr><td>1.1KV 1CORE 16SQMM ALU CABLE (EARTHING)</td><td>Meter</td><td><input name="qty_alu16" type="number" min="0" value="30" required></td></tr>
+        <tr><td>LIGHTNING ARRESTOR ROD WITH STAND</td><td>Nos</td><td><input name="qty_la" type="number" min="0" value="1" required></td></tr>
+        <tr><td>PIT COVER (EARTHING)</td><td>Nos</td><td><input name="qty_pit" type="number" min="0" value="3" required></td></tr>
+        <tr><td>MC4 MALE & FEMALE CONNECTOR</td><td>Pairs</td><td><input name="qty_mc4" type="number" min="0" value="5" required></td></tr>
+        <tr><td>300MM CABLE TIE</td><td>Packet</td><td><input name="qty_tie" type="number" min="0" value="2" required></td></tr>
+        <tr><td>25MM PVC CONDUIT PIPE (AKG)</td><td>Nos</td><td><input name="qty_conduit" type="number" min="0" value="30" required></td></tr>
+        <tr><td>PVC ELBOW</td><td>Nos</td><td><input name="qty_elbow" type="number" min="0" value="25" required></td></tr>
+        <tr><td>PVC TEE</td><td>Nos</td><td><input name="qty_tee" type="number" min="0" value="10" required></td></tr>
+        <tr><td>25MM PVC C CLIP</td><td>Nos</td><td><input name="qty_cclip" type="number" min="0" value="100" required></td></tr>
+        <tr><td>35X8 MM SCREW + GRIP</td><td>Nos</td><td><input name="qty_screw" type="number" min="0" value="30" required></td></tr>
+        <tr><td>4 SQ MM RING TYPE LUGS</td><td>Nos</td><td><input name="qty_lug4" type="number" min="0" value="35" required></td></tr>
+        <tr><td>6 SQ MM PIN TYPE LUGS</td><td>Nos</td><td><input name="qty_lug6" type="number" min="0" value="35" required></td></tr>
+        <tr><td>16 SQ MM RING TYPE LUGS</td><td>Nos</td><td><input name="qty_lug16" type="number" min="0" value="5" required></td></tr>
+        <tr><td>RED+BLACK+GREEN PVC TAPE</td><td>Nos</td><td><input name="qty_pvctape" type="number" min="0" value="3" required></td></tr>
+        <tr><td>Mid Clamp</td><td>Nos</td><td><input name="qty_midclamp" type="number" min="0" value="10" required></td></tr>
+        <tr><td>End Clamp</td><td>Nos</td><td><input name="qty_endclamp" type="number" min="0" value="10" required></td></tr>
+      </tbody>
+    </table>
+  </fieldset>
+
+  <fieldset>
+    <legend>Remarks & Signatures</legend>
+    <div class="grid">
+      <div style="grid-column:1/-1"><label>Remarks / Notes</label><textarea name="remarks" rows="4"></textarea></div>
+      <div><label>Installer Name (typed)</label><input name="installer_name" required></div>
+      <div><label>Installer Date</label><input type="date" name="installer_date" required></div>
+      <div><label>Customer Name (typed)</label><input name="customer_name_ack" required></div>
+      <div><label>Customer Date</label><input type="date" name="customer_date" required></div>
+    </div>
+  </fieldset>
+
+  <button class="primary" type="submit">Submit</button>
+</form>
+
+<script>
+function addSerial(containerId, inputName){
+  const c = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = `<input name="${inputName}" placeholder="Enter serial number" required>
+                   <button type="button" class="muted" onclick="this.parentElement.remove()">Remove</button>`;
+  c.appendChild(row);
+}
+// start with one input each
+addSerial('panel-serials','panel_serials[]');
+addSerial('inverter-serials','inverter_serials[]');
+</script>
+</body>
+</html>
