@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kalapana Sahoo — Operations Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .card { transition: transform .15s ease, box-shadow .15s ease; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+    .iframe-wrap { position: relative; padding-top: 56.25%; }
+    .iframe-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-white/15 rounded-2xl p-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-2xl md:text-3xl font-semibold">Pragati EcoSolar — Operations Dashboard</h1>
+          <p class="text-white/90">Manager: <span class="font-medium">Kalapana Sahoo</span></p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="darkToggle" class="px-3 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white text-sm">Toggle Theme</button>
+        <span id="now" class="text-white/90 text-sm hidden md:inline"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
+    <!-- Embedded Previews: All statuses -->
+    <section class="space-y-6">
+      <h2 class="text-xl font-semibold">Embedded Status Previews</h2>
+
+      <!-- Leads Status -->
+      <div class="bg-white rounded-2xl border card">
+        <div class="p-4 flex items-center justify-between">
+          <h3 class="font-medium flex items-center gap-2"><i data-lucide="folder" class="w-5 h-5 text-blue-600"></i> Leads Status</h3>
+          <a href="https://drive.google.com/drive/folders/1dd6dtxumczg9H-g_GQGRqzIu3rjJkKhf" target="_blank" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm">Open</a>
+        </div>
+        <div class="iframe-wrap">
+          <iframe src="https://drive.google.com/embeddedfolderview?id=1dd6dtxumczg9H-g_GQGRqzIu3rjJkKhf#grid"></iframe>
+        </div>
+      </div>
+
+      <!-- All Customer Status -->
+      <div class="bg-white rounded-2xl border card">
+        <div class="p-4 flex items-center justify-between">
+          <h3 class="font-medium flex items-center gap-2"><i data-lucide="table" class="w-5 h-5 text-green-600"></i> All Customer Status</h3>
+          <a href="https://drive.google.com/file/d/1LNB13bbZzCvQJ6T1tOT1tvol8Op9Dp89/view" target="_blank" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-sm">Open</a>
+        </div>
+        <div class="iframe-wrap">
+          <iframe src="https://drive.google.com/file/d/1LNB13bbZzCvQJ6T1tOT1tvol8Op9Dp89/preview"></iframe>
+        </div>
+      </div>
+
+      <!-- Daily Task -->
+      <div class="bg-white rounded-2xl border card">
+        <div class="p-4 flex items-center justify-between">
+          <h3 class="font-medium flex items-center gap-2"><i data-lucide="check-square" class="w-5 h-5 text-indigo-600"></i> Daily Task</h3>
+          <a href="https://docs.google.com/spreadsheets/d/1aLPbwCzOE94O9SAPQX4cZaUsqcV8FqsE/edit?gid=1874456127#gid=1874456127" target="_blank" class="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-sm">Open</a>
+        </div>
+        <div class="iframe-wrap">
+          <iframe src="https://docs.google.com/spreadsheets/d/1aLPbwCzOE94O9SAPQX4cZaUsqcV8FqsE/preview#gid=1874456127"></iframe>
+        </div>
+      </div>
+
+      <!-- Zoho Mail -->
+      <div class="bg-white rounded-2xl border card">
+        <div class="p-4 flex items-center justify-between">
+          <h3 class="font-medium flex items-center gap-2"><i data-lucide="mail" class="w-5 h-5 text-rose-600"></i> Zoho Mail Inbox</h3>
+          <a href="https://mail.zoho.in/zm/#mail/folder/inbox" target="_blank" class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-sm">Open</a>
+        </div>
+        <p class="text-sm text-gray-600 px-4 pb-4">Embedding restricted by Zoho. Use the Open button above.</p>
+      </div>
+
+      <!-- Zoho CRM Leads -->
+      <div class="bg-white rounded-2xl border card">
+        <div class="p-4 flex items-center justify-between">
+          <h3 class="font-medium flex items-center gap-2"><i data-lucide="kanban" class="w-5 h-5 text-amber-600"></i> Zoho CRM — Leads Kanban</h3>
+          <a href="https://one.zoho.in/zohoone/pragatiecosolar/home/cxapp/crm/org60055396335/tab/Leads/custom-view/1077189000000029342/kanban?kvId=1077189000000473532" target="_blank" class="px-3 py-1.5 bg-amber-600 text-white rounded-lg text-sm">Open</a>
+        </div>
+        <p class="text-sm text-gray-600 px-4 pb-4">Embedding restricted by Zoho. Use the Open button above.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="max-w-7xl mx-auto p-6 text-center text-sm text-gray-500">© <span id="year"></span> Pragati EcoSolar.</footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => { lucide.createIcons(); });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
