@@ -4,115 +4,307 @@
   <meta charset="UTF-8">
   <title>Dashboard | Pragati EcoSolar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Optional: nicer font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #fffdf5;
+    :root {
+      --primary: #ffb300;
+      --primary-dark: #f57c00;
+      --accent: #0288d1;
+      --bg: #fffdf5;
+      --card-bg: #ffffff;
+      --text-main: #212121;
+      --text-muted: #616161;
+      --radius-lg: 18px;
+      --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --shadow-strong: 0 14px 30px rgba(0, 0, 0, 0.14);
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #fff8e1 0, #fffdf5 45%, #ffffff 100%);
+      color: var(--text-main);
+    }
+
+    /* HEADER */
     header {
-      background: linear-gradient(45deg, #ffa000, #fdd835);
-      padding: 1rem;
+      background: linear-gradient(120deg, #ffb300, #ffd54f);
+      padding: 0.9rem 1.6rem;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1rem;
       flex-wrap: wrap;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     header img.logo {
-      height: 50px;
+      height: 52px;
+      border-radius: 10px;
+      background: #fff3cd;
+      padding: 4px 8px;
     }
 
-    header h1 {
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
       margin: 0;
-      font-size: 1.6rem;
-      color: #212121;
-      font-weight: bold;
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .brand-subtitle {
+      margin: 0;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #4e342e;
+      letter-spacing: 0.02em;
+    }
+
+    /* PAGE WRAPPER */
+    .page {
+      max-width: 1100px;
+      margin: 20px auto 30px;
+      padding: 0 16px 24px;
+    }
+
+    /* TOP INFO BAR */
+    .top-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .welcome {
+      font-size: 1.1rem;
+      color: var(--text-main);
+    }
+
+    .status-pill {
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(76, 175, 80, 0.1);
+      color: #2e7d32;
+      border: 1px solid rgba(76, 175, 80, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* SEARCH */
+    .search-bar-wrapper {
+      margin: 10px 0 18px;
+    }
+
+    .search-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
     }
 
     .search-bar {
-      margin: 25px;
-      text-align: center;
+      position: relative;
+      max-width: 380px;
     }
 
     .search-bar input {
-      width: 90%;
-      max-width: 420px;
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 25px;
-      border: 2px solid #ffa000;
+      width: 100%;
+      padding: 11px 40px 11px 16px;
+      font-size: 0.95rem;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 179, 0, 0.7);
       outline: none;
-      transition: 0.3s;
-      box-shadow: 0 0 8px rgba(255, 160, 0, 0.3);
+      background: rgba(255, 253, 245, 0.9);
+      box-shadow: var(--shadow-soft);
+      transition: 0.25s ease;
+    }
+
+    .search-bar input::placeholder {
+      color: #9e9e9e;
     }
 
     .search-bar input:focus {
-      border-color: #ff5722;
-      box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+      border-color: var(--primary-dark);
+      box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.3);
+      background: #ffffff;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+
+    /* GRID */
+    .section-title {
+      margin: 20px 0 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
 
     .container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 30px 20px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
     }
 
     .card {
-      background: linear-gradient(to bottom right, #fff8e1, #fffde7);
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-      transition: transform 0.3s, box-shadow 0.3s;
-      text-align: center;
+      background: var(--card-bg);
+      padding: 18px 17px 16px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255, 193, 7, 0.2);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at top right, rgba(255, 224, 130, 0.4), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .card:hover::before {
+      opacity: 1;
     }
 
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-strong);
+      border-color: rgba(255, 193, 7, 0.6);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 10px;
     }
 
     .card h3 {
-      margin-bottom: 12px;
-      font-size: 1.2rem;
+      margin: 0;
+      font-size: 1.05rem;
       color: #e65100;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 600;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(2, 136, 209, 0.06);
+      color: #01579b;
+      border: 1px solid rgba(2, 136, 209, 0.25);
+      white-space: nowrap;
+    }
+
+    .card p {
+      margin: 4px 0 10px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .links {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-start;
     }
 
     .card a {
-      display: block;
-      margin: 6px 0;
-      color: #0288d1;
-      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 500;
       text-decoration: none;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s ease-in-out;
+      padding-bottom: 2px;
+      border-bottom: 1px dashed transparent;
+      position: relative;
+    }
+
+    .card a::after {
+      content: "↗";
+      font-size: 0.75rem;
+      opacity: 0;
+      transform: translateX(-2px);
+      transition: 0.2s ease;
     }
 
     .card a:hover {
-      color: #01579b;
-      border-color: #81d4fa;
+      border-color: rgba(129, 212, 250, 0.9);
     }
 
+    .card a:hover::after {
+      opacity: 0.9;
+      transform: translateX(1px);
+    }
+
+    /* FOOTER */
     footer {
       text-align: center;
-      font-size: 0.9rem;
-      padding: 12px;
-      background: linear-gradient(to right, #fbc02d, #ffecb3);
-      color: #424242;
+      font-size: 0.8rem;
+      padding: 12px 8px 18px;
+      color: #6d4c41;
+    }
+
+    footer span {
+      font-weight: 500;
     }
 
     @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
+      .header-inner {
+        flex-direction: row;
+        justify-content: flex-start;
       }
-
-      header h1 {
-        margin-top: 10px;
-        font-size: 1.3rem;
+      .brand-title {
+        font-size: 1.35rem;
+      }
+      .page {
+        margin-top: 16px;
       }
     }
   </style>
@@ -120,68 +312,126 @@
 <body>
 
   <header>
-    <img class="logo" src="https://www.pragatiecosolar.in/logo.png" alt="Pragati Solar Logo" onerror="this.style.display='none'">
-    <h1>🌞 Pragati EcoSolar - Dashboard</h1>
+    <div class="header-inner">
+      <img class="logo" src="https://www.pragatiecosolar.in/logo.png"
+           alt="Pragati EcoSolar Logo"
+           onerror="this.style.display='none'">
+
+      <div class="brand-text">
+        <h1 class="brand-title">🌞 Pragati EcoSolar Dashboard</h1>
+        <p class="brand-subtitle">Quick access to tools, portals & calculators</p>
+      </div>
+    </div>
   </header>
 
-  <!-- Search -->
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="🔍 Search Dashboard..." onkeyup="filterCards()">
-  </div>
-
-  <!-- Dashboard Cards -->
-  <div class="container" id="cardContainer">
-
-    <div class="card">
-      <h3>🌐 Our Website</h3>
-      <a href="https://www.pragatiecosolar.in/" target="_blank">Visit Website</a>
+  <main class="page">
+    <div class="top-row">
+      <div class="welcome">
+        Welcome! Use this panel to jump to all important solar tools.
+      </div>
+      <div class="status-pill">
+        🟢 Live · Internal Use
+      </div>
     </div>
 
-    <div class="card">
-      <h3>📚 Consumer Documentation</h3>
-      <a href="https://pmsuryaghar.gov.in/#/" target="_blank">PM Suryaghar Portal</a>
-      <a href="https://solardcrportal.nise.res.in/" target="_blank">DCR Portal</a>
-    </div>
-  
-    <div class="card">
-      <h3>💳 Billing & Invoicing</h3>
-      <a href="https://mybillbook.in/" target="_blank">MyBillBook</a>
-    </div>
+    <!-- Search -->
+    <section class="search-bar-wrapper">
+      <div class="search-label">Search within sections & links</div>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Type to filter: website, calculator, billing..."
+               onkeyup="filterCards()">
+        <span class="search-icon">🔍</span>
+      </div>
+    </section>
 
-    <div class="card">
-      <h3>🧾 Quotation Tools</h3>
-      <a href="https://onehub.solarbee.in/" target="_blank">SolarBee OneHub</a>
-      <a href="https://mybillbook.in/store/bhakti_solar_energy" target="_blank">MyBillBook Quotation</a>
-    </div>
+    <!-- Dashboard Cards -->
+    <h2 class="section-title">Quick Links</h2>
+    <section class="container" id="cardContainer">
 
-    <div class="card">
-      <h3>🔢 Solar Calculators</h3>
-      <a href="https://dilipsahoo100.github.io/Solar-Calculator/hybrid_solar_calculator_1.html" target="_blank">Hybrid Calculator</a>
-      <a href="https://dilipsahoo100.github.io/Solar-Calculator/odisha_ongrid_solar_savings_calculator.html" target="_blank" style="margin-top:10px;">Ongrid Calculator</a>
-       <a href="https://dilipsahoo100.github.io/Solar-Calculator/Calaculator.html" target="_blank">3KW Ongrid Calculator</a>
-    </div>
-  
+      <article class="card">
+        <div class="card-header">
+          <h3>🌐 Our Website</h3>
+          <span class="tag">Public</span>
+        </div>
+        <p>Main company website for customers & marketing.</p>
+        <div class="links">
+          <a href="https://www.pragatiecosolar.in/" target="_blank">Visit Pragati EcoSolar Website</a>
+        </div>
+      </article>
 
-  </div>
+      <article class="card">
+        <div class="card-header">
+          <h3>📚 Consumer Documentation</h3>
+          <span class="tag">Govt Portals</span>
+        </div>
+        <p>Official portals for PM SuryaGhar scheme and DCR-related documentation.</p>
+        <div class="links">
+          <a href="https://pmsuryaghar.gov.in/#/" target="_blank">PM SuryaGhar Portal</a>
+          <a href="https://solardcrportal.nise.res.in/" target="_blank">DCR Portal</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-header">
+          <h3>💳 Billing & Invoicing</h3>
+          <span class="tag">Internal</span>
+        </div>
+        <p>Create invoices, track payments & manage billing.</p>
+        <div class="links">
+          <a href="https://mybillbook.in/" target="_blank">Open MyBillBook</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-header">
+          <h3>🧾 Quotation Tools</h3>
+          <span class="tag">Proposals</span>
+        </div>
+        <p>Generate quotations using SolarBee and MyBillBook store.</p>
+        <div class="links">
+          <a href="https://onehub.solarbee.in/" target="_blank">SolarBee OneHub</a>
+          <a href="https://mybillbook.in/store/bhakti_solar_energy" target="_blank">MyBillBook Quotation Store</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-header">
+          <h3>🔢 Solar Calculators</h3>
+          <span class="tag">Sizing & Savings</span>
+        </div>
+        <p>Calculate system size, savings and returns for Odisha customers.</p>
+        <div class="links">
+          <a href="https://dilipsahoo100.github.io/Solar-Calculator/hybrid_solar_calculator_1.html" target="_blank">
+            Hybrid Solar Calculator
+          </a>
+          <a href="https://dilipsahoo100.github.io/Solar-Calculator/odisha_ongrid_solar_savings_calculator.html"
+             target="_blank">
+            Odisha Ongrid Savings Calculator
+          </a>
+          <a href="https://dilipsahoo100.github.io/Solar-Calculator/Calaculator.html" target="_blank">
+            3 kW Ongrid Calculator
+          </a>
+        </div>
+      </article>
+
+    </section>
+  </main>
 
   <footer>
-    © 2025 Bhakti Solar Energy. All rights reserved.
+    © <span>2025 Pragati EcoSolar</span>. All rights reserved.
   </footer>
 
   <script>
     function filterCards() {
       const input = document.getElementById("searchInput").value.toLowerCase();
       const cards = document.querySelectorAll(".card");
+
       cards.forEach(card => {
-        card.style.display = card.innerText.toLowerCase().includes(input) ? "" : "none";
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(input) ? "" : "none";
       });
     }
   </script>
 
 </body>
 </html>
-
-
-
-
-
