@@ -64,7 +64,7 @@ function calculateSolar() {
         costPerKW = parseFloat(document.getElementById('commCostPerKW').value) || 60000;
         subsidyText = "Not applicable";
     } else {
-        costPerKW = 70000; // Typical domestic cost per kW
+        costPerKW = 70000; // Typical domestic cost per kW (keep as-is for >2kW)
     }
 
     // Calculations
@@ -73,7 +73,14 @@ function calculateSolar() {
     // System sizing: minimum 2 kW, then round up to next whole kW
     const systemKW = Math.max(2, Math.ceil(requiredKW));
 
-    const grossCost = systemKW * costPerKW;
+    // ✅ UPDATED: Gross cost fixed for 2kW (₹155000), rest unchanged
+    let grossCost;
+    if (plantType === 'domestic' && systemKW === 2) {
+        grossCost = 155000; // Fixed 2kW price
+    } else {
+        grossCost = systemKW * costPerKW; // Rest as-is
+    }
+
     let stateSubsidy = 0, centralSubsidy = 0;
 
     // Domestic subsidy calculation
